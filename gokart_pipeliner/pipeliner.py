@@ -29,6 +29,7 @@ class GokartPipeliner:
 
     def _init_config(self, config_path_list: TYPING.STR_LIST):
         """Add config from config_path_list."""
+        luigi.configuration.core.PARSER = 'ini'
         for x in config_path_list:
             assert luigi.configuration.add_config_path(x)
 
