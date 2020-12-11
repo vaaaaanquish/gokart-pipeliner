@@ -22,3 +22,13 @@ gp = GokartPipeliner(
 running_params = {'TaskB': {'param1':'bar'}}
 gp.run(predict, params=running_params)
 ```
+
+
+```
+pip install poetry
+pip install poetry-dynamic-versioning
+
+# poetry install
+poetry build
+# poetry lock
+```

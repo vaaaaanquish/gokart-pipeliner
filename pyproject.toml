@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "gokart_pipeliner"
+version = "0.0.0"  # using poetry-dynamic-versioning
+description = "gokart pipeline"
+authors = ["vaaaaanquish <6syun9@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/vaaaaanquish/gokart-pipeliner"
+repository = "https://github.com/vaaaaanquish/gokart-pipeliner"
+documentation = ""
+
+[tool.poetry-dynamic-versioning]
+enable = true
+style = "pep440"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+gokart = "==0.3.20"
+
+[build-system]
+requires = ["poetry"]
+build-backend = "poetry.masonry.api"
