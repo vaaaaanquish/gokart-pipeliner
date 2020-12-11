@@ -3,17 +3,22 @@ gokart pipeline project
 
 
 ```python
-import gokart_pipliner
+from gokart_pipeliner import GokartPipeliner
+from ExampleTasks import *
 
 # make pipeline
 preprocess = [TaskA, {'task_b': TaskB, 'task_c': TaskC}, TaskD]
 modeling = [preprocess, TaskE, {'task_f': TaskF}, TaskF]
 predict = [{'model': modeling, 'task_a': TaskA}, TaskG]
 
-# setting params
+# instantiation (setting static params)
 params = {'TaskA': {'param1':0.1, 'param2': 'sample'}, 'TaskD': {'param1': 'foo'}}
-gokart_pipliner.add_config_path('./conf/param.ini')
+config_path_list = ['./conf/param.ini']
+gp = GokartPipeliner(
+    params=params,
+    config_path_list=config_path_list)
 
-# run
-gokart_pipliner.run(predict, params=params)
+# run (setting dynamic params)
+running_params = {'TaskB': {'param1':'bar'}}
+gp.run(predict, params=running_params)
 ```
