@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import gokart
 
-from gokart_pipeliner import InstantiationTask
+from gokart_pipeliner.instantiation_task import InstantiationTask
 
 
 class MockGokartTask(gokart.TaskOnKart):
@@ -15,7 +15,7 @@ class MockGokartTargetTask(gokart.TaskOnKart):
 
 
 class TestInstantiationTask(unittest.TestCase):
-    def _mock_instantiation_endpoint_task(self, mock):
+    def _mock_instantiation_tasks(self, mock):
         mock.instantiation_dict_task.side_effect = lambda x, y: {
             k: v()
             for k, v in x.items()
@@ -24,25 +24,25 @@ class TestInstantiationTask(unittest.TestCase):
 
     @patch('gokart_pipeliner.InstantiationTask')
     def test_run(self, mock):
-        mock = self._mock_instantiation_endpoint_task(mock)
+        mock = self._mock_instantiation_tasks(mock)
         output = InstantiationTask.run(MockGokartTask)
         self.assertEqual(output, MockGokartTask())
 
     @patch('gokart_pipeliner.InstantiationTask')
     def test_run_list(self, mock):
-        mock = self._mock_instantiation_endpoint_task(mock)
+        mock = self._mock_instantiation_tasks(mock)
         output = InstantiationTask.run([MockGokartTask, MockGokartTargetTask])
         self.assertEqual(output, MockGokartTargetTask(target=MockGokartTask()))
 
     @patch('gokart_pipeliner.InstantiationTask')
     def test_run_dict(self, mock):
-        mock = self._mock_instantiation_endpoint_task(mock)
+        mock = self._mock_instantiation_tasks(mock)
         output = InstantiationTask.run({'target': MockGokartTask})
         self.assertDictEqual(output, {'target': MockGokartTask()})
 
     @patch('gokart_pipeliner.InstantiationTask')
     def test_run_list_dict(self, mock):
-        mock = self._mock_instantiation_endpoint_task(mock)
+        mock = self._mock_instantiation_tasks(mock)
         output = InstantiationTask.run([{
             'target': MockGokartTask
         }, MockGokartTargetTask])

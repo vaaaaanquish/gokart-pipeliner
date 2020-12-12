@@ -1,4 +1,6 @@
+import luigi
 import gokart
+
 from gokart_pipeliner import GokartPipeliner
 
 
@@ -17,10 +19,11 @@ class TaskB(gokart.TaskOnKart):
 
 class TaskC(gokart.TaskOnKart):
     foo = gokart.TaskInstanceParameter()
+    text = luigi.Parameter()
 
     def run(self):
         x = self.load('foo')
-        self.dump(x + ['C'])
+        self.dump(x + [self.text])
 
 
 class TaskD(gokart.TaskOnKart):
@@ -34,7 +37,10 @@ class TaskD(gokart.TaskOnKart):
 
 
 if __name__ == '__main__':
-    gp = GokartPipeliner()
     a = [TaskA]
     b = [a, {'foo': TaskB}, TaskC]
-    gp.run([{'foo': a, 'bar': b}, TaskD])
+
+    params = {'TaskC': {'text': 'c'}}
+
+    gp = GokartPipeliner()
+    gp.run([{'foo': a, 'bar': b}, TaskD], params=params)

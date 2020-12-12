@@ -3,45 +3,55 @@ import gokart
 
 class InstantiationTask:
     @classmethod
-    def run(cls, tasks, before_task=None) -> gokart.TaskOnKart:
+    def run(cls, tasks, before_task=None, params=dict()) -> gokart.TaskOnKart:
         if isinstance(tasks, list):
-            before_task = cls.instantiation_list_task(tasks, before_task)
+            before_task = cls.instantiation_list_task(tasks, before_task,
+                                                      params)
         elif isinstance(tasks, dict):
-            before_task = cls.instantiation_dict_task(tasks, before_task)
+            before_task = cls.instantiation_dict_task(tasks, before_task,
+                                                      params)
         else:
-            before_task = cls.instantiation_task(tasks, before_task)
+            before_task = cls.instantiation_task(tasks, before_task, params)
 
         return before_task
 
     @classmethod
-    def instantiation_list_task(cls, task_list, before_task):
+    def instantiation_list_task(cls, task_list, before_task, params=dict()):
         for task in task_list:
             if isinstance(task, dict):
-                before_task = cls.instantiation_dict_task(task, before_task)
+                before_task = cls.instantiation_dict_task(
+                    task, before_task, params)
             elif isinstance(task, list):
-                before_task = cls.run(task, before_task)
+                before_task = cls.run(task, before_task, params)
             else:
-                before_task = cls.instantiation_task(task, before_task)
+                before_task = cls.instantiation_task(task, before_task, params)
         return before_task
 
     @classmethod
-    def instantiation_dict_task(cls, task_dict, before_task):
-        return {k: cls.run(v, before_task) for k, v in task_dict.items()}
+    def instantiation_dict_task(cls, task_dict, before_task, params=dict()):
+        return {
+            k: cls.run(v, before_task, params)
+            for k, v in task_dict.items()
+        }
 
     @classmethod
-    def instantiation_task(cls, task, before_task):
+    def instantiation_task(cls, task, before_task, params=dict()):
         task_parameters = [
             var for var, object_name in vars(task).items()
             if isinstance(object_name, gokart.parameter.TaskInstanceParameter)
         ]
 
         task = cls.override_requires(task, task_parameters)
+        specification_params = params.get(task.__name__, {})
 
         if isinstance(before_task, dict):
-            return task(**{t: before_task[t] for t in task_parameters})
+            return task(**specification_params,
+                        **{t: before_task[t]
+                           for t in task_parameters})
         if before_task is None:
-            return task()
-        return task(**{task_parameters[0]: before_task})
+            return task(**specification_params)
+        return task(**specification_params,
+                    **{task_parameters[0]: before_task})
 
     @staticmethod
     def override_requires(task, task_parameters):
