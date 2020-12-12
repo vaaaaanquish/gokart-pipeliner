@@ -10,31 +10,22 @@ class TaskA(gokart.TaskOnKart):
 class TaskB(gokart.TaskOnKart):
     target = gokart.TaskInstanceParameter()
 
-    def requires(self):
-        return self.target
-
     def run(self):
-        x = self.load()
+        x = self.load('target')
         self.dump(x + ['b'])
 
 
 class TaskC(gokart.TaskOnKart):
     foo = gokart.TaskInstanceParameter()
 
-    def requires(self):
-        return self.foo
-
     def run(self):
-        x = self.load()
+        x = self.load('foo')
         self.dump(x + ['C'])
 
 
 class TaskD(gokart.TaskOnKart):
     foo = gokart.TaskInstanceParameter()
     bar = gokart.TaskInstanceParameter()
-
-    def requires(self):
-        return {'foo': self.foo, 'bar': self.bar}
 
     def run(self):
         x = self.load('foo')

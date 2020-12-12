@@ -28,15 +28,33 @@ class InstantiationTask:
     def instantiation_dict_task(cls, task_dict, before_task):
         return {k: cls.run(v, before_task) for k, v in task_dict.items()}
 
-    @staticmethod
-    def instantiation_task(task, before_task):
+    @classmethod
+    def instantiation_task(cls, task, before_task):
         task_parameters = [
             var for var, object_name in vars(task).items()
             if isinstance(object_name, gokart.parameter.TaskInstanceParameter)
         ]
+
+        task = cls.override_requires(task, task_parameters)
 
         if isinstance(before_task, dict):
             return task(**{t: before_task[t] for t in task_parameters})
         if before_task is None:
             return task()
         return task(**{task_parameters[0]: before_task})
+
+    @staticmethod
+    def override_requires(task, task_parameters):
+        """
+        class Task(gokart.TaskOnKart):
+            foo = gokart.TaskInstanceParameter()
+            bar = gokart.TaskInstanceParameter()
+
+            def requires(self):
+                return {'foo': self.foo, 'bar': self.bar}
+        """
+        def requires(cls):
+            return {t: getattr(cls, t) for t in task_parameters}
+
+        task.requires = requires
+        return task

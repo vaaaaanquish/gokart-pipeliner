@@ -75,3 +75,9 @@ class TestInstantiationTask(unittest.TestCase):
         before_task = {'target': MockGokartTask()}
         output = InstantiationTask.instantiation_task(task, before_task)
         self.assertIsInstance(output, gokart.TaskOnKart)
+
+    def test_override_requires(self):
+        task = MockGokartTargetTask
+        task = InstantiationTask.override_requires(task, ['target'])
+        output = task.requires(task)
+        self.assertDictEqual(output, {'target': task.target})
