@@ -1,6 +1,7 @@
 from typing import List
 
 import luigi
+import gokart
 
 from gokart_pipeliner.instantiation_task import InstantiationTask
 from gokart_pipeliner.enum import TYPING
@@ -15,8 +16,16 @@ class GokartPipeliner:
 
     def run(self,
             tasks: List[luigi.task_register.Register],
-            params: TYPING.PARAMS = dict(),
-            return_values: TYPING.STR_LIST = list()):
+            params: TYPING.PARAMS = dict()):
         params = self.config.make_running_params(params)
         task = InstantiationTask.run(tasks, params=params)
         luigi.build([task], local_scheduler=True)
+
+    def print_dependence_tree(self,
+                              tasks: List[luigi.task_register.Register],
+                              params: TYPING.PARAMS = dict()):
+        params = self.config.make_running_params(params)
+        task = InstantiationTask.run(tasks, params=params)
+        print("//-----[dependence_tree]------")
+        print(gokart.info.make_tree_info(task))
+        print("//----------------------------")
