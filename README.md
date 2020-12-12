@@ -4,7 +4,7 @@ gokart pipeline project
 
 # Usage
 
-Please show [SampleTask.py](https://github.com/vaaaaanquish/gokart-pipeliner/blob/main/examples/SampleTasks.py)
+Please show [SampleTask.py](https://github.com/vaaaaanquish/gokart-pipeliner/blob/main/examples/SampleTasks.py) or [Eaxmple.ipynb](https://github.com/vaaaaanquish/gokart-pipeliner/blob/main/examples/Example.ipynb)
 
 ```python
 from gokart_pipeliner import GokartPipeliner
