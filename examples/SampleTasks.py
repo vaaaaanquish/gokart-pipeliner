@@ -43,4 +43,5 @@ if __name__ == '__main__':
     params = {'TaskC': {'text': 'c'}}
 
     gp = GokartPipeliner()
+    gp.print_dependence_tree([{'foo': a, 'bar': b}, TaskD], params=params)
     gp.run([{'foo': a, 'bar': b}, TaskD], params=params)
