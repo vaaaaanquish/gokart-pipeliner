@@ -19,7 +19,8 @@ class GokartPipeliner:
     def run(self,
             tasks: List[luigi.task_register.Register],
             params: TYPING.PARAMS = dict(),
-            verbose: bool = True):
+            return_value: bool = False,
+            verbose: bool = True) -> TYPING.RETURN_VALURE:
 
         if verbose:
             logging.disable(0)
@@ -29,6 +30,9 @@ class GokartPipeliner:
         params = self.config.make_running_params(params)
         task = InstantiationTask.run(tasks, params=params)
         luigi.build([task], local_scheduler=True)
+
+        if return_value:
+            return task.make_target().load()
 
     def print_dependence_tree(self,
                               tasks: List[luigi.task_register.Register],

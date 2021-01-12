@@ -37,6 +37,14 @@ class Task(gokart.TaskOnKart):
         self.dump(x)
 ```
 
+## get task result
+
+We can get result of latest pipeline tasks.
+```python
+task_b_result = gp.run([TaskA, TaskB], return_value=True)
+```
+
+
 ## write requires
 
 If you say "want to write requires" or "want to reuse existing tasks", we can use `override_requires` parameter.
