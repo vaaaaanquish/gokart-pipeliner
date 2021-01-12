@@ -41,8 +41,9 @@ class InstantiationTask:
             if isinstance(object_name, gokart.parameter.TaskInstanceParameter)
         ]
 
-        task = cls.override_requires(task, task_parameters)
         specification_params = params.get(task.__name__, {})
+        if specification_params.pop('override_requires', True):
+            task = cls.override_requires(task, task_parameters)
 
         if isinstance(before_task, dict):
             return task(**specification_params,

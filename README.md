@@ -37,6 +37,14 @@ class Task(gokart.TaskOnKart):
         self.dump(x)
 ```
 
+## write requires
+
+If you say "want to write requires" or "want to reuse existing tasks", we can use `override_requires` parameter.
+```python
+params = {'ExistingTask': {'override_requires': False}}
+gp.run([ExistingTask], params=params)
+```
+
 # Develop
 
 ```
