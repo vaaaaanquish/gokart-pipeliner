@@ -90,3 +90,14 @@ class TestInstantiationTask(unittest.TestCase):
         task = InstantiationTask.override_requires(task, ['target'])
         output = task.requires(task)
         self.assertDictEqual(output, {'target': task.target})
+
+    def test_override_requires_get_input_targets(self):
+        task = MockGokartTargetTask
+        task.input = lambda: {'target': 'foo'}
+        task = InstantiationTask.override_requires(task, ['target'])
+
+        output = task._get_input_targets(task, 'target')
+        self.assertEqual(output, 'foo')
+
+        output = task._get_input_targets(task, None)
+        self.assertEqual(output, 'foo')
