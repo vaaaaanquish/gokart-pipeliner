@@ -1,4 +1,6 @@
 from typing import List
+import logging
+import sys
 
 import luigi
 import gokart
@@ -16,7 +18,14 @@ class GokartPipeliner:
 
     def run(self,
             tasks: List[luigi.task_register.Register],
-            params: TYPING.PARAMS = dict()):
+            params: TYPING.PARAMS = dict(),
+            verbose: bool = True):
+
+        if verbose:
+            logging.disable(0)
+        else:
+            logging.disable(sys.maxsize)
+
         params = self.config.make_running_params(params)
         task = InstantiationTask.run(tasks, params=params)
         luigi.build([task], local_scheduler=True)
@@ -26,6 +35,6 @@ class GokartPipeliner:
                               params: TYPING.PARAMS = dict()):
         params = self.config.make_running_params(params)
         task = InstantiationTask.run(tasks, params=params)
-        print("//-----[dependence_tree]------")
+        print('//-----[dependence_tree]------')
         print(gokart.info.make_tree_info(task))
-        print("//----------------------------")
+        print('//----------------------------')

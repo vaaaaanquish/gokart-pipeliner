@@ -45,6 +45,13 @@ params = {'ExistingTask': {'override_requires': False}}
 gp.run([ExistingTask], params=params)
 ```
 
+## for jupyter notebook
+
+### off logger
+```python
+gp.run([Task], params=params, verbose=False)
+```
+
 # Develop
 
 ```
