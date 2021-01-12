@@ -67,5 +67,14 @@ class InstantiationTask:
         def requires(cls):
             return {t: getattr(cls, t) for t in task_parameters}
 
+        def _get_input_targets(cls, target):
+            """For task name may not be specified."""
+            if target is None:
+                return cls.input()[list(cls.input().keys())[0]]
+            if isinstance(target, str):
+                return cls.input()[target]
+            return target
+
         task.requires = requires
+        task._get_input_targets = _get_input_targets
         return task
