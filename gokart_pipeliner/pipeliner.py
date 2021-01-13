@@ -32,7 +32,8 @@ class GokartPipeliner:
         luigi.build([task], local_scheduler=True)
 
         if return_value:
-            return task.make_target().load()
+            return task.output().load()
+        return None
 
     def print_dependence_tree(self,
                               tasks: List[luigi.task_register.Register],
