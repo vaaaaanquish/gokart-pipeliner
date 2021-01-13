@@ -27,9 +27,12 @@ class GokartPipeliner:
         else:
             logging.disable(sys.maxsize)
 
+        luigi.auto_namespace(scope=__name__)
+        luigi.task_register.Register.disable_instance_cache()
         params = self.config.make_running_params(params)
         task = InstantiationTask.run(tasks, params=params)
         luigi.build([task], local_scheduler=True)
+        luigi.task_register.Register.clear_instance_cache()
 
         if return_value:
             return task.output().load()
