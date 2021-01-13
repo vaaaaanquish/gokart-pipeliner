@@ -1,4 +1,5 @@
 import gokart
+import copy
 
 
 class InstantiationTask:
@@ -41,7 +42,7 @@ class InstantiationTask:
             if isinstance(object_name, gokart.parameter.TaskInstanceParameter)
         ]
 
-        specification_params = params.get(task.__name__, {})
+        specification_params = copy.copy(params.get(task.__name__, {}))
         if specification_params.pop('override_requires', True):
             task = cls.override_requires(task, task_parameters)
 
