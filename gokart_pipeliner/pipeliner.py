@@ -35,7 +35,10 @@ class GokartPipeliner:
         luigi.task_register.Register.clear_instance_cache()
 
         if return_value:
-            return task.output().load()
+            output = task.output()
+            if type(output) == list:
+                return [x.load() for x in output]
+            return output.load()
         return None
 
     def print_dependence_tree(self,
