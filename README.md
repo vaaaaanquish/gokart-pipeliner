@@ -1,3 +1,9 @@
+
+# --- [WARINING] Suspend this project ---
+
+This project included in gokart 1.0.0. Thanks :)
+
+
 # gokart-pipeliner
 gokart pipeline project
 
